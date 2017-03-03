@@ -74,6 +74,11 @@ set(CMAKE_CXX_FLAGS
 target_link_libraries(cellatom ${LLVM_LIBS_FLAGS})
 # llvm-config only gained a --system-libs flag in 3.5
 if (LLVM_VER VERSION_GREATER 3.4)
+
+	# when there is only whitespace returned by llvm-config --system-libs,
+	# target_link_libraries add `-l` to link line
+	string(STRIP ${LLVM_SYSTEMLIBS} LLVM_SYSTEMLIBS)
+
 	target_link_libraries(cellatom ${LLVM_SYSTEMLIBS})
 endif()
 set(CMAKE_EXE_LINKER_FLAGS "${LLVM_LDFLAGS} ${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${LLVM_LIBDIR}")
